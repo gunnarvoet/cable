@@ -36,52 +36,52 @@ else ifeq ($(OS),windows)
 	CC = gcc
    LD = gcc
    CFLAGS   = -O6 -Wall -funroll-loops -I../include -DWINGUI \
-              -DZLIB -mms-bitfields 
-   LDFLAGS = -mwindows 
+              -DZLIB -mms-bitfields
+   LDFLAGS = -mwindows
    WOBJS   = WinControl.o winres.o
-#   WOBJS   = 
-   XLIBS   = 
+#   WOBJS   =
+   XLIBS   =
 #   ZLIBS    = -L/cygdrive/c/gtk/lib -lz
    ZLIBS    = -lz
 else ifeq ($(OS),OSX)
    CFLAGS  = -g -O2 -Wall -funroll-loops -I../include \
              -DZLIB -DGUI -I../widgets -mmacosx-version-min=10.4
-   WOBJS   = Xcontrol.o 
-   LDFLAGS = -mmacosx-version-min=10.4 
+   WOBJS   = Xcontrol.o
+   LDFLAGS = -mmacosx-version-min=10.4
    WIDGETS  = ../widgets/libwidgets.a
    XLIBS    = -L/usr/X11R6/lib -lXaw -lXmu -lXt -lX11
    ZLIBS   = -lz
 else ifeq ($(OS),OSX-universal)
    CFLAGS = -O2 -Wall -funroll-loops -I../include \
             -force_cpusubtype_ALL -mmacosx-version-min=10.4 \
-            -arch i386 -arch ppc -DZLIB 
-   WOBJS   = Xcontrol.o 
+            -arch i386 -arch ppc -DZLIB
+   WOBJS   = Xcontrol.o
    LDFLAGS = -force_cpusubtype_ALL -mmacosx-version-min=10.4 \
              -arch i386 -arch ppc
-   WIDGETS  = 
-   XLIBS    = 
+   WIDGETS  =
+   XLIBS    =
    ZLIBS   = -lz
 else ifeq ($(OS),nox)
-   CFLAGS = -g -Wall -funroll-loops -I../include -DZLIB 
-   WOBJS  = 
+   CFLAGS = -g -Wall -funroll-loops -I../include -DZLIB
+   WOBJS  =
    XLIBS  =
    WIDGETS =
-   LDFLAGS  = -g -static 
+   LDFLAGS  = -g -static
    ZLIBS    = -lz -lm
 else
    CFLAGS = -g -DGUI -Wall -funroll-loops -I../include \
-            -DZLIB -I../widgets -I/usr/X11R6/include 
-   WOBJS   = Xcontrol.o 
-   LDFLAGS  = -g  
+            -DZLIB -I../widgets -I/usr/X11R6/include -I/opt/X11/include
+   WOBJS   = Xcontrol.o
+   LDFLAGS  = -g
    WIDGETS  = ../widgets/libwidgets.a
-   XLIBS    = -L/usr/X11R6/lib -lXaw -lXmu -lXt -lX11 
+   XLIBS    = -L/usr/X11R6/lib -lXaw -lXmu -lXt -lX11
    ZLIBS    = -lz -lm
 #   LAMP	    = ../LAMP/lamp_whoi.a -lg2c
 endif
 
 OBJS	= cli.o error.o options.o
 
-ASCOBJS = res2asc.o options.o errtxt.o 
+ASCOBJS = res2asc.o options.o errtxt.o
 MATOBJS = res2mat.o options.o basename.o errtxt.o
 
 LIBS	= ../solver/libsolver.a ../model/libmodel.a ../results/libresults.a
@@ -92,23 +92,22 @@ PROG	= cable res2mat res2asc
 all:           	cable res2mat res2asc
 
 cable:          $(OBJS) $(LIBS) $(WIDGETS) $(WOBJS)
-		$(CC) -o cable $(LDFLAGS) $(OBJS) $(WOBJS) $(LIBS) $(WIDGETS) $(XLIBS) $(ZLIBS) $(DEBUGLIBS) $(LAMP) 
+		$(CC) -o cable $(LDFLAGS) $(OBJS) $(WOBJS) $(LIBS) $(WIDGETS) $(XLIBS) $(ZLIBS) $(DEBUGLIBS) $(LAMP)
 
 res2mat:    $(MATOBJS) $(RESLIBS) $(LIBS)
-		$(CC) -static -o res2mat $(LDFLAGS) $(MATOBJS) $(RESLIBS) $(ZLIBS) 
+		$(CC) -o res2mat $(LDFLAGS) $(MATOBJS) $(RESLIBS) $(ZLIBS)
 
 res2asc:    $(ASCOBJS) $(RESLIBS) $(LIBS)
-		$(CC) $(LDFLAGS) -static -o res2asc $(ASCOBJS) $(RESLIBS) $(ZLIBS)
+		$(CC) $(LDFLAGS) -o res2asc $(ASCOBJS) $(RESLIBS) $(ZLIBS)
 
 api:		api.o $(OBJS) $(LIBS)
 		rm -f libcable.a
 		$(AR) libcable.a api.o $(OBJS)
 		$(RANLIB) libcable.a
-					
+
 winres.o:	WinControl.rc
 		windres -i WinControl.rc -o winres.o
 
 clean:;         @rm -f $(OBJS) $(ASCOBJS) $(MATOBJS) $(PROG) cli.o driver.o api.o WinControl.o Xcontrol.o core winres.o *.core
 
-realclean:;     @rm -f $(OBJS) $(PROG) core; 
-
+realclean:;     @rm -f $(OBJS) $(PROG) core;

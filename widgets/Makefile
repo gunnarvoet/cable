@@ -20,7 +20,7 @@
 #
 
 CC       = gcc
-CFLAGS   = -O2 -g -I../include 
+CFLAGS   = -O2 -g -I../include
 AR       = ar cq
 RANLIB   = ranlib
 
@@ -29,15 +29,15 @@ ifeq ($(OS),OSX-universal)
              -force_cpusubtype_ALL -mmacosx-version-min=10.4 \
              -arch i386 -arch ppc
 else ifeq ($(OS),OSX)
-    CFLAGS   = -Wall -O2 -g -I../include -mmacosx-version-min=10.4
+    CFLAGS   = -Wall -O2 -g -I../include -mmacosx-version-min=10.4 -I/opt/X11/include/X11
 else
-    CFLAGS   = -Wall -O2 -g -I../include 
+    CFLAGS   = -Wall -O2 -g -I../include -I/opt/X11/include
 endif
 
 LIB	= libwidgets.a
 OBJS	= post.o tabgroup.o scroll.o util.o outputdialog.o
 LOBJS   = Layout.o laygram.o laylex.o
-# LOBJS	= 
+# LOBJS	=
 
 all:            $(LIB)
 
